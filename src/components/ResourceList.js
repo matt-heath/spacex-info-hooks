@@ -1,28 +1,20 @@
-import React from 'react';
-import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+import useResources from "../useResources";
 
-class ResourceList extends React.Component {
-    state = {resources: []}
 
-    async componentDidMount() {
-        const response = await axios.get(`https://api.spacexdata.com/v3/launches/${this.props.resource}`);
-        this.setState({resources: response.data});
-    }
+const ResourceList = ({resource}) => {
+    const resources = useResources(resource);
 
-    async componentDidUpdate(prevProps) {
-        if (prevProps.resource !== this.props.resource) {
-            const response = await axios.get(`https://api.spacexdata.com/v3/launches/${this.props.resource}`);
-            this.setState({resources: response.data});
-        }
-    }
-
-    render() {
-        return (
-            <>
-                {this.state.resources.length}
-            </>
-        );
-    }
+    return (
+        <ul>
+            {resources.map(record =>
+                <li key={record.flight_number}>
+                    {`${record.flight_number} -
+                    ${record.mission_name}`}
+                    <img src={record.links.flickr_images.length > 0 && record.links.flickr_images.reduce(img => img)} alt=""/>
+                </li>)}
+        </ul>
+    );
 }
 
 export default ResourceList;
