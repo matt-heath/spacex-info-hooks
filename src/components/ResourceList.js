@@ -1,16 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import React from 'react';
+import useResources from "../hooks/useResource";
 
 const ResourceList = ({resource}) => {
-    const [resources, setResources] = useState([]);
-
-    useEffect(() => {
-        (async (resource) => {
-            const response = await axios.get(`https://api.spacexdata.com/v3/launches/${resource}`);
-            setResources(response.data)
-        })(resource)
-    }, [resource]);
-
+    const resources = useResources(resource)
     return (
         <>
             <h4>Number of launches ({resources.length})</h4>
