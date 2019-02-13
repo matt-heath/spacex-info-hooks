@@ -1,28 +1,24 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 
-class ResourceList extends React.Component {
-    state = {resources: []}
+const ResourceList = ({resource}) => {
+    const [resources, setResources] = useState([]);
 
-    async componentDidMount() {
-        const response = await axios.get(`https://api.spacexdata.com/v3/launches/${this.props.resource}`);
-        this.setState({resources: response.data});
-    }
+    useEffect(() => {
+        (async (resource) => {
+            const response = await axios.get(`https://api.spacexdata.com/v3/launches/${resource}`);
+            setResources(response.data)
+        })(resource)
+    }, [resource]);
 
-    async componentDidUpdate(prevProps) {
-        if (prevProps.resource !== this.props.resource) {
-            const response = await axios.get(`https://api.spacexdata.com/v3/launches/${this.props.resource}`);
-            this.setState({resources: response.data});
-        }
-    }
-
-    render() {
-        return (
-            <>
-                {this.state.resources.length}
-            </>
-        );
-    }
+    return (
+        <>
+            <h4>Number of launches ({resources.length})</h4>
+            <ul>
+                {resources.map(resource => <li key={resource.mission_name}>{resource.mission_name}</li>)}
+            </ul>
+        </>
+    );
 }
 
 export default ResourceList;
