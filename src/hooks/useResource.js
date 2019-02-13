@@ -6,7 +6,7 @@ const useResources = (resource) => {
 
     useEffect(() => {
         (async (resource) => {
-            const response = await axios.get(`https://api.spacexdata.com/v3/launches/${resource}`);
+            const response = await axios.get(`https://api.spacexdata.com/v3/${resource}`);
             setResources(response.data)
         })(resource)
     }, [resource]);
